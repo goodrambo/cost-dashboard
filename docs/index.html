@@ -1,147 +1,180 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OpenClaw Cost Monitor</title>
+  <title>OpenClaw Cost Dashboard</title>
   <style>
-    :root{--bg:#0b1020;--line:#2b3a69;--text:#e9eeff;--muted:#9fb0e6;--accent:#6ea8ff;--accent2:#8b7dff;--good:#29c36a;--warn:#ffb020;--danger:#ff5d5d}
+    :root{--bg:#0b1020;--line:#2b3a69;--text:#eef3ff;--muted:#b0bee9;--accent:#75adff;--accent2:#9585ff;--ok:#2ecc71;--warn:#ffb347;--danger:#ff6b6b}
     *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,ui-sans-serif,system-ui;background:radial-gradient(1000px 500px at 15% -10%,#273a7a44,transparent),var(--bg);color:var(--text)}
-    .wrap{max-width:1100px;margin:24px auto;padding:0 14px}
-    .top{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap}
-    h1{margin:0;font-size:24px}
-    .badge{padding:6px 10px;border-radius:999px;background:#1d2a52;border:1px solid var(--line);color:var(--muted);font-size:12px}
-    .ctrl{display:flex;gap:8px;align-items:center}
-    select{background:#111a35;color:var(--text);border:1px solid var(--line);padding:6px 10px;border-radius:8px}
+    body{margin:0;font-family:Inter,Segoe UI,Roboto,system-ui,-apple-system,sans-serif;background:radial-gradient(900px 440px at 12% -8%,#2a3d8242,transparent),var(--bg);color:var(--text)}
+    .wrap{max-width:1120px;margin:20px auto;padding:0 14px}
+    .top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}
+    h1{margin:0;font-size:24px;letter-spacing:.2px}
+    .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    label{color:var(--muted);font-size:13px}
+    select{background:#101a38;border:1px solid var(--line);color:var(--text);padding:8px 10px;border-radius:8px;font-size:14px}
+    .badge{font-size:12px;padding:7px 10px;border-radius:999px;background:#1b2752;border:1px solid var(--line);color:var(--muted)}
+
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
-    .card{background:linear-gradient(180deg,#162248,#121a34);border:1px solid var(--line);border-radius:14px;padding:14px}
-    .kpi{grid-column:span 3}.chart{grid-column:span 12}.list{grid-column:span 6}
-    .label{font-size:12px;color:var(--muted)} .value{font-size:30px;font-weight:700;margin-top:6px}
-    .sub{font-size:12px;color:var(--muted);margin-top:6px}
-    .row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed #2a3a6d}
-    .bar{height:7px;background:#1b2852;border-radius:999px;overflow:hidden;margin-top:4px}.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-    canvas{width:100%;height:240px;background:#101833;border:1px solid #2a3a6d;border-radius:10px}
-    .muted{color:var(--muted)}
-    @media (max-width:980px){.kpi,.list{grid-column:span 12}}
+    .card{background:linear-gradient(180deg,#17244b,#121b35);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .kpi{grid-column:span 3}.chart{grid-column:span 12}.table{grid-column:span 12}
+    .label{font-size:12px;color:var(--muted)}
+    .value{margin-top:6px;font-size:30px;font-weight:700;line-height:1.1}
+    .sub{margin-top:6px;font-size:12px;color:var(--muted)}
+    .status-ok{color:var(--ok)} .status-warn{color:var(--warn)} .status-danger{color:var(--danger)}
+
+    canvas{width:100%;height:250px;background:#101833;border:1px solid #2a3a6d;border-radius:10px}
+
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th,td{padding:10px 8px;border-bottom:1px dashed #2a3a6d;text-align:right}
+    th:first-child,td:first-child{text-align:left}
+    th{color:var(--muted);font-weight:600}
+
+    @media (max-width:980px){.kpi{grid-column:span 6}}
+    @media (max-width:640px){
+      .kpi,.chart,.table{grid-column:span 12}
+      h1{font-size:20px}
+      .value{font-size:26px}
+      table{font-size:13px}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="top">
-      <h1>OpenClaw 成本監控</h1>
-      <div class="ctrl">
-        <label class="muted" for="modelFilter">模型篩選</label>
+      <h1>OpenClaw Cost Dashboard</h1>
+      <div class="controls">
+        <label for="modelFilter">Model</label>
         <select id="modelFilter"></select>
-        <div class="badge" id="updated">更新中...</div>
+        <div class="badge" id="updated">Loading...</div>
       </div>
     </div>
 
     <div class="grid">
-      <div class="card kpi"><div class="label">最近 24h 成本</div><div class="value" id="cost24">$0.0000</div><div class="sub" id="range">-</div></div>
-      <div class="card kpi"><div class="label">最近 7 天成本</div><div class="value" id="cost7d">$0.0000</div><div class="sub">滾動 7 天</div></div>
-      <div class="card kpi"><div class="label">累積總成本</div><div class="value" id="costAll">$0.0000</div><div class="sub">自 logs 可見起累積</div></div>
-      <div class="card kpi"><div class="label">24h 計費訊息</div><div class="value" id="msgs">0</div><div class="sub" id="statusLine">-</div></div>
+      <div class="card kpi">
+        <div class="label">Last 24 Hours</div>
+        <div class="value" id="cost24">$0.0000</div>
+        <div class="sub" id="range">-</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Last 7 Days</div>
+        <div class="value" id="cost7d">$0.0000</div>
+        <div class="sub">rolling window</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">All-Time Total</div>
+        <div class="value" id="costAll">$0.0000</div>
+        <div class="sub">from available OpenClaw logs</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Billed Messages (24h)</div>
+        <div class="value" id="msgs">0</div>
+        <div class="sub" id="statusLine">-</div>
+      </div>
 
       <div class="card chart">
-        <div class="label" id="chartTitle" style="margin-bottom:8px">24H 成本趨勢（全部模型）</div>
+        <div class="label" id="chartTitle" style="margin-bottom:8px">24h Trend (All Models)</div>
         <canvas id="trend" width="1000" height="260"></canvas>
       </div>
 
-      <div class="card list">
-        <div class="label" style="margin-bottom:8px">Top Models（24h）</div>
-        <div id="models"></div>
-      </div>
-
-      <div class="card list">
-        <div class="label" style="margin-bottom:8px">Top Agents（公開版隱藏）</div>
-        <div id="agents" class="muted">已隱藏</div>
+      <div class="card table">
+        <div class="label" style="margin-bottom:8px">Models (sorted by All-Time, 7D, 24H)</div>
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr><th>Model</th><th>All-Time</th><th>7 Days</th><th>24 Hours</th></tr>
+            </thead>
+            <tbody id="modelsTable"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 
 <script>
-let cacheData=null;
-
+let dataCache=null;
 const fmtMoney=v=>`$${Number(v||0).toFixed(4)}`;
-const fmtTime=s=>new Date(s).toLocaleString('zh-TW',{hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+const fmtTime=s=>new Date(s).toLocaleString('en-US',{hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
 
-function renderList(elId,list){
-  const box=document.getElementById(elId);
-  if(!list||!list.length){box.innerHTML='<div class="muted">無資料</div>';return;}
-  const max=Math.max(...list.map(x=>x.cost),1);
-  box.innerHTML=list.map(x=>`<div class='row'><div><div>${x.name}</div><div class='bar'><span style='width:${(x.cost/max)*100}%'></span></div></div><div>${fmtMoney(x.cost)}</div></div>`).join('');
+function fillFilter(models){
+  const sel=document.getElementById('modelFilter');
+  const prev=sel.value||'ALL';
+  sel.innerHTML=['<option value="ALL">All models</option>',...(models||[]).map(m=>`<option value="${m}">${m}</option>`)].join('');
+  if([...(models||[]),'ALL'].includes(prev)) sel.value=prev;
 }
 
 function getSeries(d,model){
   const rows=(d.hourly||[]).slice(-24);
-  if(!model || model==='ALL') return rows.map(x=>Number(x.cost||0));
+  if(model==='ALL') return rows.map(x=>Number(x.cost||0));
   return rows.map(x=>Number((x.byModel||{})[model]||0));
 }
 
 function drawTrend(d,model){
-  const data=getSeries(d,model);
-  const c=document.getElementById('trend'); const ctx=c.getContext('2d');
-  const w=c.width,h=c.height,p={l:46,r:14,t:14,b:28};
+  const pointsData=getSeries(d,model);
+  const c=document.getElementById('trend'),ctx=c.getContext('2d');
+  const w=c.width,h=c.height,p={l:48,r:14,t:14,b:28};
   ctx.clearRect(0,0,w,h);
+  const max=Math.max(...pointsData,0.0001);
 
-  const max=Math.max(...data,0.0001);
   ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=1;
   for(let i=0;i<=4;i++){
-    const y=p.t+(h-p.t-p.b)*(i/4);ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();
-    ctx.fillStyle='rgba(200,215,255,.7)';ctx.font='11px sans-serif';ctx.fillText(`$${(max*(1-i/4)).toFixed(2)}`,6,y+4);
+    const y=p.t+(h-p.t-p.b)*(i/4);
+    ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();
+    ctx.fillStyle='rgba(210,225,255,.7)';ctx.font='11px sans-serif';ctx.fillText(`$${(max*(1-i/4)).toFixed(2)}`,6,y+4);
   }
 
-  const step=(w-p.l-p.r)/Math.max(data.length-1,1);
-  const points=data.map((v,i)=>({x:p.l+i*step,y:p.t+(1-v/max)*(h-p.t-p.b)}));
+  const step=(w-p.l-p.r)/Math.max(pointsData.length-1,1);
+  const pts=pointsData.map((v,i)=>({x:p.l+i*step,y:p.t+(1-v/max)*(h-p.t-p.b)}));
 
   const grad=ctx.createLinearGradient(0,p.t,0,h-p.b);
-  grad.addColorStop(0,'rgba(110,168,255,.38)');grad.addColorStop(1,'rgba(110,168,255,.02)');
-  ctx.beginPath();points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-  ctx.lineTo(points.at(-1)?.x||p.l,h-p.b);ctx.lineTo(points[0]?.x||p.l,h-p.b);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+  grad.addColorStop(0,'rgba(117,173,255,.35)');grad.addColorStop(1,'rgba(117,173,255,.02)');
+  ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+  ctx.lineTo(pts.at(-1)?.x||p.l,h-p.b);ctx.lineTo(pts[0]?.x||p.l,h-p.b);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
 
-  ctx.beginPath();points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));ctx.strokeStyle='#86b6ff';ctx.lineWidth=2.2;ctx.stroke();
-  ctx.fillStyle='#d7e6ff';points.forEach((pt,i)=>{if(i%6===0||i===points.length-1){ctx.beginPath();ctx.arc(pt.x,pt.y,2.5,0,Math.PI*2);ctx.fill();}});
+  ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+  ctx.strokeStyle='#87b8ff';ctx.lineWidth=2.2;ctx.stroke();
 }
 
-function applyModelFilter(){
-  if(!cacheData) return;
-  const model=document.getElementById('modelFilter').value;
-  document.getElementById('chartTitle').textContent = model==='ALL' ? '24H 成本趨勢（全部模型）' : `24H 成本趨勢（${model}）`;
-  drawTrend(cacheData,model);
+function updateKPIs(model){
+  const stats=(dataCache.modelStats||[]);
+  const all={cost24h:dataCache.totalCost24h||0,cost7d:dataCache.totalCost7d||0,costAll:dataCache.totalCostAll||0};
+  const s=model==='ALL'?all:(stats.find(x=>x.name===model)||{cost24h:0,cost7d:0,costAll:0});
+
+  document.getElementById('cost24').textContent=fmtMoney(s.cost24h);
+  document.getElementById('cost7d').textContent=fmtMoney(s.cost7d);
+  document.getElementById('costAll').textContent=fmtMoney(s.costAll);
+
+  const c24=Number(s.cost24h||0), status=document.getElementById('statusLine');
+  status.className='sub ' + (c24>50?'status-danger':c24>20?'status-warn':'status-ok');
+  status.textContent = c24>50?'High spend in last 24h':c24>20?'Spend is rising':'Spend is normal';
+
+  document.getElementById('chartTitle').textContent = model==='ALL' ? '24h Trend (All Models)' : `24h Trend (${model})`;
+  drawTrend(dataCache,model);
 }
 
-function fillModelFilter(models){
-  const sel=document.getElementById('modelFilter');
-  const old=sel.value||'ALL';
-  sel.innerHTML=['<option value="ALL">全部模型</option>',...(models||[]).map(m=>`<option value="${m}">${m}</option>`)].join('');
-  if([...(models||[]),'ALL'].includes(old)) sel.value=old;
+function renderTable(){
+  const rows=(dataCache.modelStats||[]);
+  const body=document.getElementById('modelsTable');
+  body.innerHTML = rows.map(r=>`<tr><td>${r.name}</td><td>${fmtMoney(r.costAll)}</td><td>${fmtMoney(r.cost7d)}</td><td>${fmtMoney(r.cost24h)}</td></tr>`).join('') || '<tr><td colspan="4">No data</td></tr>';
 }
 
 async function load(){
   const r=await fetch('./data/latest.json?_='+Date.now());
-  if(!r.ok) throw new Error('無法讀取資料');
-  const d=await r.json(); cacheData=d;
+  if(!r.ok) throw new Error('Cannot load latest.json');
+  dataCache=await r.json();
 
-  document.getElementById('updated').textContent='更新：'+fmtTime(d.generatedAt);
-  document.getElementById('range').textContent=`區間：${fmtTime(d.range.start)} → ${fmtTime(d.range.end)}`;
-  document.getElementById('cost24').textContent=fmtMoney(d.totalCost24h ?? d.totalCost);
-  document.getElementById('cost7d').textContent=fmtMoney(d.totalCost7d);
-  document.getElementById('costAll').textContent=fmtMoney(d.totalCostAll);
-  document.getElementById('msgs').textContent=String(d.messageCount||0);
+  document.getElementById('updated').textContent='Updated: '+fmtTime(dataCache.generatedAt);
+  document.getElementById('range').textContent=`Range: ${fmtTime(dataCache.range.start)} → ${fmtTime(dataCache.range.end)}`;
+  document.getElementById('msgs').textContent=String(dataCache.messageCount||0);
 
-  const c24=Number(d.totalCost24h ?? d.totalCost ?? 0);
-  document.getElementById('statusLine').textContent = c24>50 ? '⚠️ 24h 成本偏高' : c24>20 ? '⚠️ 24h 成本上升' : '✅ 24h 成本正常';
-
-  renderList('models', d.topModels||[]);
-  if((d.topAgents||[]).length) renderList('agents', d.topAgents||[]);
-
-  fillModelFilter(d.models||[]);
-  applyModelFilter();
+  fillFilter(dataCache.models||[]);
+  renderTable();
+  updateKPIs(document.getElementById('modelFilter').value||'ALL');
 }
 
-document.getElementById('modelFilter').addEventListener('change', applyModelFilter);
-load().catch(e=>{document.getElementById('updated').textContent='載入失敗：'+e.message});
+document.getElementById('modelFilter').addEventListener('change',e=>updateKPIs(e.target.value));
+load().catch(e=>{document.getElementById('updated').textContent='Load failed: '+e.message});
 setInterval(()=>load().catch(()=>{}), 60000);
 </script>
 </body>
