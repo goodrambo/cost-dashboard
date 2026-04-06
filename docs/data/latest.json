@@ -1,34 +1,13 @@
 {
-  "generatedAt": "2026-04-07T03:57:22.025910+08:00",
+  "generatedAt": "2026-04-07T03:58:50.526753+08:00",
   "windowHours": 24,
   "range": {
-    "start": "2026-04-06T03:57:22.025910+08:00",
-    "end": "2026-04-07T03:57:22.025910+08:00"
+    "start": "2026-04-06T03:58:50.526753+08:00",
+    "end": "2026-04-07T03:58:50.526753+08:00"
   },
-  "totalCost": 89.019853,
-  "messageCount": 418,
-  "topAgents": [
-    {
-      "name": "stock_research",
-      "cost": 74.22669
-    },
-    {
-      "name": "general",
-      "cost": 5.98772
-    },
-    {
-      "name": "main",
-      "cost": 4.561589
-    },
-    {
-      "name": "coding",
-      "cost": 4.237105
-    },
-    {
-      "name": "stock_report",
-      "cost": 0.00675
-    }
-  ],
+  "totalCost": 89.284507,
+  "messageCount": 427,
+  "topAgents": [],
   "topModels": [
     {
       "name": "gpt-5.4-pro",
@@ -40,7 +19,7 @@
     },
     {
       "name": "gpt-5.3-codex",
-      "cost": 4.237105
+      "cost": 4.501758
     },
     {
       "name": "gpt-4.1-mini",
@@ -150,7 +129,7 @@
     },
     {
       "hour": "2026-04-07 03:00",
-      "cost": 23.741206
+      "cost": 24.00586
     }
   ]
 }
