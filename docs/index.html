@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OpenClaw Cost Monitor</title>
+  <style>
+    body{font-family:ui-sans-serif,system-ui;max-width:980px;margin:24px auto;padding:0 12px;background:#0b1020;color:#e7ecff}
+    .card{background:#131a33;border:1px solid #2a355f;border-radius:10px;padding:14px;margin-bottom:12px}
+    h1{margin:0 0 12px 0;font-size:22px}.muted{color:#9fb0e6}
+    .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .pill{padding:10px;border-radius:8px;background:#1a2347}
+    .big{font-size:28px;font-weight:700}
+    .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #2a355f}
+    .bar{height:8px;background:#22315f;border-radius:99px;overflow:hidden;margin-top:6px}
+    .bar>span{display:block;height:100%;background:#6da8ff}
+    #hourly{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;height:140px}
+    #hourly div{background:#6da8ff55;border:1px solid #6da8ff88;border-radius:3px}
+  </style>
+</head>
+<body>
+  <h1>OpenClaw 成本監控</h1>
+  <div class="muted" id="meta">載入中...</div>
+
+  <div class="card kpi">
+    <div class="pill"><div class="muted">最近 24 小時成本</div><div class="big" id="cost">-</div></div>
+    <div class="pill"><div class="muted">計費訊息數</div><div class="big" id="msgs">-</div></div>
+    <div class="pill"><div class="muted">最後更新</div><div class="big" id="updated" style="font-size:16px">-</div></div>
+  </div>
+
+  <div class="card">
+    <h3>每小時成本趨勢</h3>
+    <div id="hourly"></div>
+  </div>
+
+  <div class="card">
+    <h3>Top Agents</h3>
+    <div id="agents"></div>
+  </div>
+
+  <div class="card">
+    <h3>Top Models</h3>
+    <div id="models"></div>
+  </div>
+
+<script>
+async function load(){
+  const res = await fetch('./data/latest.json?_=' + Date.now());
+  if(!res.ok) throw new Error('無法讀取 data/latest.json');
+  const d = await res.json();
+
+  document.getElementById('meta').textContent = `區間：${d.range.start} → ${d.range.end}`;
+  document.getElementById('cost').textContent = `$${Number(d.totalCost).toFixed(4)}`;
+  document.getElementById('msgs').textContent = d.messageCount;
+  document.getElementById('updated').textContent = new Date(d.generatedAt).toLocaleString('zh-TW');
+
+  const renderList=(id,list)=>{
+    const max=Math.max(...list.map(x=>x.cost),1);
+    document.getElementById(id).innerHTML=list.map(x=>
+      `<div class='row'><div>${x.name}</div><div>$${x.cost.toFixed(4)}</div></div><div class='bar'><span style='width:${(x.cost/max)*100}%'></span></div>`
+    ).join('') || '<div class="muted">無資料</div>';
+  };
+  renderList('agents', d.topAgents||[]);
+  renderList('models', d.topModels||[]);
+
+  const h=d.hourly||[]; const maxH=Math.max(...h.map(x=>x.cost),1);
+  document.getElementById('hourly').innerHTML=h.slice(-24).map(x=>
+    `<div title='${x.hour} $${x.cost.toFixed(4)}' style='height:${Math.max(2,(x.cost/maxH)*100)}%'></div>`
+  ).join('');
+}
+
+load().catch(e=>{document.getElementById('meta').textContent='載入失敗：'+e.message});
+setInterval(()=>load().catch(()=>{}), 60000);
+</script>
+</body>
+</html>
