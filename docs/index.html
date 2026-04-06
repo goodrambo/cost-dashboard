@@ -183,9 +183,11 @@ function renderTable(){
   body.innerHTML = rows.map(r=>`<tr><td>${r.name}</td><td>${fmtMoney(r.costAll)}</td><td>${fmtMoney(r.cost7d)}</td><td>${fmtMoney(r.cost24h)}</td></tr>`).join('') || '<tr><td colspan="4">No data</td></tr>';
 }
 
+const DATA_URL='https://gist.githubusercontent.com/goodrambo/a2453d85d2aabc179aa2241997db52b0/raw/latest.json';
+
 async function load(){
-  const r=await fetch('./data/latest.json?_='+Date.now());
-  if(!r.ok) throw new Error('Cannot load latest.json');
+  const r=await fetch(DATA_URL+'?_='+Date.now(), {cache:'no-store'});
+  if(!r.ok) throw new Error('Cannot load data source');
   dataCache=await r.json();
 
   document.getElementById('updated').textContent='Updated: '+fmtTime(dataCache.generatedAt);
