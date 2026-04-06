@@ -113,55 +113,61 @@ function getSeries(d,model){
 function drawTrend(d,model){
   const rows=(d.hourly||[]).slice(-24);
   const pointsData=getSeries(d,model);
-  const c=document.getElementById('trend'),ctx=c.getContext('2d');
-  const w=c.width,h=c.height,p={l:70,r:16,t:16,b:40};
+  const c=document.getElementById('trend');
+  const dpr=Math.max(window.devicePixelRatio||1,1);
+  const cssW=c.clientWidth || 1000;
+  const cssH=260;
+  c.width=Math.floor(cssW*dpr);
+  c.height=Math.floor(cssH*dpr);
+  const ctx=c.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+
+  const w=cssW,h=cssH,p={l:78,r:20,t:18,b:46};
   ctx.clearRect(0,0,w,h);
   const max=Math.max(...pointsData,0.0001);
 
-  // Y grid + labels
-  ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=1;
-  ctx.fillStyle='rgba(210,225,255,.78)';ctx.font='12px Inter, sans-serif';
+  // Y grid + labels (bigger font for mobile clarity)
+  ctx.strokeStyle='rgba(255,255,255,.10)';ctx.lineWidth=1;
+  ctx.fillStyle='rgba(225,236,255,.88)';ctx.font='13px Inter, sans-serif';
   for(let i=0;i<=4;i++){
     const y=p.t+(h-p.t-p.b)*(i/4);
     ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();
-    ctx.fillText(`$${(max*(1-i/4)).toFixed(2)}`,8,y+4);
+    ctx.fillText(`$${(max*(1-i/4)).toFixed(2)}`,10,y+4);
   }
 
-  // X axis line
-  ctx.beginPath();ctx.moveTo(p.l,h-p.b);ctx.lineTo(w-p.r,h-p.b);ctx.strokeStyle='rgba(255,255,255,.16)';ctx.stroke();
+  // X axis
+  ctx.beginPath();ctx.moveTo(p.l,h-p.b);ctx.lineTo(w-p.r,h-p.b);ctx.strokeStyle='rgba(255,255,255,.2)';ctx.stroke();
 
   const step=(w-p.l-p.r)/Math.max(pointsData.length-1,1);
   const pts=pointsData.map((v,i)=>({x:p.l+i*step,y:p.t+(1-v/max)*(h-p.t-p.b)}));
 
-  // Area
   const grad=ctx.createLinearGradient(0,p.t,0,h-p.b);
-  grad.addColorStop(0,'rgba(117,173,255,.35)');grad.addColorStop(1,'rgba(117,173,255,.02)');
+  grad.addColorStop(0,'rgba(117,173,255,.35)');grad.addColorStop(1,'rgba(117,173,255,.03)');
   ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
   ctx.lineTo(pts.at(-1)?.x||p.l,h-p.b);ctx.lineTo(pts[0]?.x||p.l,h-p.b);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
 
-  // Line
   ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-  ctx.strokeStyle='#87b8ff';ctx.lineWidth=2.2;ctx.stroke();
+  ctx.strokeStyle='#8bbcff';ctx.lineWidth=2.4;ctx.stroke();
 
-  // X labels with unit
-  const marks=[0,Math.floor((rows.length-1)/2),rows.length-1].filter((v,i,a)=>v>=0&&a.indexOf(v)===i);
-  ctx.fillStyle='rgba(210,225,255,.78)';ctx.font='11px Inter, sans-serif';
-  marks.forEach(i=>{
-    const x=p.l+i*step;
-    const hour=((rows[i]?.hour||'').split(' ')[1]||'').slice(0,2);
-    const txt=hour?`${hour}h`:'-';
-    ctx.fillText(txt,x-10,h-12);
+  // X labels: fixed 24h window with clear units
+  ctx.fillStyle='rgba(225,236,255,.9)';ctx.font='12px Inter, sans-serif';
+  const marks=[{i:0,t:'24h ago'},{i:Math.floor((rows.length-1)/2),t:'12h ago'},{i:rows.length-1,t:'now'}];
+  marks.forEach(m=>{
+    if(m.i<0) return;
+    const x=p.l+m.i*step;
+    ctx.fillText(m.t,x-22,h-14);
   });
 }
 
 function updateKPIs(model){
   const stats=(dataCache.modelStats||[]);
-  const all={cost24h:dataCache.totalCost24h||0,cost7d:dataCache.totalCost7d||0,costAll:dataCache.totalCostAll||0};
-  const s=model==='ALL'?all:(stats.find(x=>x.name===model)||{cost24h:0,cost7d:0,costAll:0});
+  const all={cost24h:dataCache.totalCost24h||0,cost7d:dataCache.totalCost7d||0,costAll:dataCache.totalCostAll||0,messages24h:dataCache.messageCount||0};
+  const s=model==='ALL'?all:(stats.find(x=>x.name===model)||{cost24h:0,cost7d:0,costAll:0,messages24h:0});
 
   document.getElementById('cost24').textContent=fmtMoney(s.cost24h);
   document.getElementById('cost7d').textContent=fmtMoney(s.cost7d);
   document.getElementById('costAll').textContent=fmtMoney(s.costAll);
+  document.getElementById('msgs').textContent=String(s.messages24h||0);
 
   const c24=Number(s.cost24h||0), status=document.getElementById('statusLine');
   status.className='sub ' + (c24>50?'status-danger':c24>20?'status-warn':'status-ok');
@@ -184,8 +190,6 @@ async function load(){
 
   document.getElementById('updated').textContent='Updated: '+fmtTime(dataCache.generatedAt);
   document.getElementById('range').textContent=`Range: ${fmtTime(dataCache.range.start)} → ${fmtTime(dataCache.range.end)}`;
-  document.getElementById('msgs').textContent=String(dataCache.messageCount||0);
-
   fillFilter(dataCache.models||[]);
   renderTable();
   updateKPIs(document.getElementById('modelFilter').value||'ALL');
