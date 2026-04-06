@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-04-07T04:04:31.196850+08:00",
+  "generatedAt": "2026-04-07T04:10:03.699374+08:00",
   "windowHours": 24,
   "range": {
-    "start": "2026-04-06T04:04:31.196850+08:00",
-    "end": "2026-04-07T04:04:31.196850+08:00"
+    "start": "2026-04-06T04:10:03.699374+08:00",
+    "end": "2026-04-07T04:10:03.699374+08:00"
   },
-  "totalCost": 90.029531,
-  "totalCost24h": 90.029531,
-  "totalCost7d": 90.029531,
-  "totalCostAll": 90.029531,
-  "messageCount": 438,
+  "totalCost": 90.171206,
+  "totalCost24h": 90.171206,
+  "totalCost7d": 90.171206,
+  "totalCostAll": 90.171206,
+  "messageCount": 444,
   "models": [
     "gpt-5.4-pro",
     "gpt-5.4",
@@ -29,7 +29,7 @@
     },
     {
       "name": "gpt-5.3-codex",
-      "cost": 4.871109
+      "cost": 5.012784
     },
     {
       "name": "gpt-4.1-mini",
@@ -307,11 +307,11 @@
     },
     {
       "hour": "2026-04-07 04:00",
-      "cost": 0.309578,
+      "cost": 0.451253,
       "byModel": {
         "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.0,
-        "gpt-5.3-codex": 0.309578,
+        "gpt-5.3-codex": 0.451253,
         "gpt-4.1-mini": 0.0,
         "gpt-5-mini": 0.0
       }
