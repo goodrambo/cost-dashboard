@@ -53,9 +53,9 @@
 
     <div class="grid">
       <div class="card kpi">
-        <div class="label">Last 24 Hours</div>
-        <div class="value" id="cost24">$0.0000</div>
-        <div class="sub" id="range">-</div>
+        <div class="label">All-Time Total</div>
+        <div class="value" id="costAll">$0.0000</div>
+        <div class="sub">from available OpenClaw logs</div>
       </div>
       <div class="card kpi">
         <div class="label">Last 7 Days</div>
@@ -63,9 +63,9 @@
         <div class="sub">rolling window</div>
       </div>
       <div class="card kpi">
-        <div class="label">All-Time Total</div>
-        <div class="value" id="costAll">$0.0000</div>
-        <div class="sub">from available OpenClaw logs</div>
+        <div class="label">Last 24 Hours</div>
+        <div class="value" id="cost24">$0.0000</div>
+        <div class="sub" id="range">-</div>
       </div>
       <div class="card kpi">
         <div class="label">Billed Messages (24h)</div>
@@ -111,29 +111,47 @@ function getSeries(d,model){
 }
 
 function drawTrend(d,model){
+  const rows=(d.hourly||[]).slice(-24);
   const pointsData=getSeries(d,model);
   const c=document.getElementById('trend'),ctx=c.getContext('2d');
-  const w=c.width,h=c.height,p={l:48,r:14,t:14,b:28};
+  const w=c.width,h=c.height,p={l:70,r:16,t:16,b:40};
   ctx.clearRect(0,0,w,h);
   const max=Math.max(...pointsData,0.0001);
 
+  // Y grid + labels
   ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=1;
+  ctx.fillStyle='rgba(210,225,255,.78)';ctx.font='12px Inter, sans-serif';
   for(let i=0;i<=4;i++){
     const y=p.t+(h-p.t-p.b)*(i/4);
     ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();
-    ctx.fillStyle='rgba(210,225,255,.7)';ctx.font='11px sans-serif';ctx.fillText(`$${(max*(1-i/4)).toFixed(2)}`,6,y+4);
+    ctx.fillText(`$${(max*(1-i/4)).toFixed(2)}`,8,y+4);
   }
+
+  // X axis line
+  ctx.beginPath();ctx.moveTo(p.l,h-p.b);ctx.lineTo(w-p.r,h-p.b);ctx.strokeStyle='rgba(255,255,255,.16)';ctx.stroke();
 
   const step=(w-p.l-p.r)/Math.max(pointsData.length-1,1);
   const pts=pointsData.map((v,i)=>({x:p.l+i*step,y:p.t+(1-v/max)*(h-p.t-p.b)}));
 
+  // Area
   const grad=ctx.createLinearGradient(0,p.t,0,h-p.b);
   grad.addColorStop(0,'rgba(117,173,255,.35)');grad.addColorStop(1,'rgba(117,173,255,.02)');
   ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
   ctx.lineTo(pts.at(-1)?.x||p.l,h-p.b);ctx.lineTo(pts[0]?.x||p.l,h-p.b);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
 
+  // Line
   ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
   ctx.strokeStyle='#87b8ff';ctx.lineWidth=2.2;ctx.stroke();
+
+  // X labels with unit
+  const marks=[0,Math.floor((rows.length-1)/2),rows.length-1].filter((v,i,a)=>v>=0&&a.indexOf(v)===i);
+  ctx.fillStyle='rgba(210,225,255,.78)';ctx.font='11px Inter, sans-serif';
+  marks.forEach(i=>{
+    const x=p.l+i*step;
+    const hour=((rows[i]?.hour||'').split(' ')[1]||'').slice(0,2);
+    const txt=hour?`${hour}h`:'-';
+    ctx.fillText(txt,x-10,h-12);
+  });
 }
 
 function updateKPIs(model){
