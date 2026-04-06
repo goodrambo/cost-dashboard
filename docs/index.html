@@ -5,71 +5,172 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OpenClaw Cost Monitor</title>
   <style>
-    body{font-family:ui-sans-serif,system-ui;max-width:980px;margin:24px auto;padding:0 12px;background:#0b1020;color:#e7ecff}
-    .card{background:#131a33;border:1px solid #2a355f;border-radius:10px;padding:14px;margin-bottom:12px}
-    h1{margin:0 0 12px 0;font-size:22px}.muted{color:#9fb0e6}
-    .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .pill{padding:10px;border-radius:8px;background:#1a2347}
-    .big{font-size:28px;font-weight:700}
-    .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #2a355f}
-    .bar{height:8px;background:#22315f;border-radius:99px;overflow:hidden;margin-top:6px}
-    .bar>span{display:block;height:100%;background:#6da8ff}
-    #hourly{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;height:140px}
-    #hourly div{background:#6da8ff55;border:1px solid #6da8ff88;border-radius:3px}
+    :root{
+      --bg:#0b1020; --bg2:#121a31; --card:#131c37; --line:#2b3a69;
+      --text:#e9eeff; --muted:#9fb0e6; --accent:#6ea8ff; --accent2:#8b7dff;
+      --good:#29c36a; --warn:#ffb020; --danger:#ff5d5d;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui;background:radial-gradient(1000px 500px at 15% -10%,#273a7a44,transparent),var(--bg);color:var(--text)}
+    .wrap{max-width:1100px;margin:24px auto;padding:0 14px}
+    .top{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+    h1{margin:0;font-size:24px;letter-spacing:.3px}
+    .badge{padding:6px 10px;border-radius:999px;background:#1d2a52;border:1px solid var(--line);color:var(--muted);font-size:12px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+    .card{background:linear-gradient(180deg,#162248,#121a34);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .kpi{grid-column:span 4}
+    .chart{grid-column:span 12}
+    .list{grid-column:span 6}
+    .label{font-size:12px;color:var(--muted)}
+    .value{font-size:32px;font-weight:700;margin-top:6px}
+    .sub{font-size:12px;color:var(--muted);margin-top:6px}
+    .row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed #2a3a6d}
+    .bar{height:7px;background:#1b2852;border-radius:999px;overflow:hidden;margin-top:4px}
+    .bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+    .muted{color:var(--muted)}
+    canvas{width:100%;height:240px;background:#101833;border:1px solid #2a3a6d;border-radius:10px}
+    @media (max-width:900px){.kpi,.list{grid-column:span 12}}
   </style>
 </head>
 <body>
-  <h1>OpenClaw 成本監控</h1>
-  <div class="muted" id="meta">載入中...</div>
+  <div class="wrap">
+    <div class="top">
+      <h1>OpenClaw 成本監控</h1>
+      <div class="badge" id="updated">更新中...</div>
+    </div>
 
-  <div class="card kpi">
-    <div class="pill"><div class="muted">最近 24 小時成本</div><div class="big" id="cost">-</div></div>
-    <div class="pill"><div class="muted">計費訊息數</div><div class="big" id="msgs">-</div></div>
-    <div class="pill"><div class="muted">最後更新</div><div class="big" id="updated" style="font-size:16px">-</div></div>
-  </div>
+    <div class="grid">
+      <div class="card kpi">
+        <div class="label">最近 24 小時成本</div>
+        <div class="value" id="cost">$0.0000</div>
+        <div class="sub" id="range">-</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">計費訊息數</div>
+        <div class="value" id="msgs">0</div>
+        <div class="sub">來源：OpenClaw session logs</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">狀態</div>
+        <div class="value" id="status">正常</div>
+        <div class="sub" id="warn">-</div>
+      </div>
 
-  <div class="card">
-    <h3>每小時成本趨勢</h3>
-    <div id="hourly"></div>
-  </div>
+      <div class="card chart">
+        <div class="label" style="margin-bottom:8px">24H 成本趨勢</div>
+        <canvas id="trend" width="1000" height="260"></canvas>
+      </div>
 
-  <div class="card">
-    <h3>Top Agents</h3>
-    <div id="agents"></div>
-  </div>
+      <div class="card list">
+        <div class="label" style="margin-bottom:8px">Top Models</div>
+        <div id="models"></div>
+      </div>
 
-  <div class="card">
-    <h3>Top Models</h3>
-    <div id="models"></div>
+      <div class="card list">
+        <div class="label" style="margin-bottom:8px">Top Agents（公開版預設隱藏）</div>
+        <div id="agents" class="muted">已隱藏</div>
+      </div>
+    </div>
   </div>
 
 <script>
-async function load(){
-  const res = await fetch('./data/latest.json?_=' + Date.now());
-  if(!res.ok) throw new Error('無法讀取 data/latest.json');
-  const d = await res.json();
+function fmtMoney(v){return `$${Number(v||0).toFixed(4)}`}
 
-  document.getElementById('meta').textContent = `區間：${d.range.start} → ${d.range.end}`;
-  document.getElementById('cost').textContent = `$${Number(d.totalCost).toFixed(4)}`;
-  document.getElementById('msgs').textContent = d.messageCount;
-  document.getElementById('updated').textContent = new Date(d.generatedAt).toLocaleString('zh-TW');
-
-  const renderList=(id,list)=>{
-    const max=Math.max(...list.map(x=>x.cost),1);
-    document.getElementById(id).innerHTML=list.map(x=>
-      `<div class='row'><div>${x.name}</div><div>$${x.cost.toFixed(4)}</div></div><div class='bar'><span style='width:${(x.cost/max)*100}%'></span></div>`
-    ).join('') || '<div class="muted">無資料</div>';
-  };
-  renderList('agents', d.topAgents||[]);
-  renderList('models', d.topModels||[]);
-
-  const h=d.hourly||[]; const maxH=Math.max(...h.map(x=>x.cost),1);
-  document.getElementById('hourly').innerHTML=h.slice(-24).map(x=>
-    `<div title='${x.hour} $${x.cost.toFixed(4)}' style='height:${Math.max(2,(x.cost/maxH)*100)}%'></div>`
-  ).join('');
+function renderList(elId, list){
+  const box=document.getElementById(elId);
+  if(!list || !list.length){ box.innerHTML='<div class="muted">無資料</div>'; return; }
+  const max=Math.max(...list.map(x=>x.cost),1);
+  box.innerHTML=list.map(x=>`
+    <div class='row'>
+      <div>
+        <div>${x.name}</div>
+        <div class='bar'><span style='width:${(x.cost/max)*100}%'></span></div>
+      </div>
+      <div>${fmtMoney(x.cost)}</div>
+    </div>
+  `).join('');
 }
 
-load().catch(e=>{document.getElementById('meta').textContent='載入失敗：'+e.message});
+function drawTrend(hourly){
+  const c=document.getElementById('trend');
+  const ctx=c.getContext('2d');
+  const w=c.width,h=c.height;
+  ctx.clearRect(0,0,w,h);
+
+  const pad={l:46,r:14,t:14,b:28};
+  const data=(hourly||[]).slice(-24).map(x=>Number(x.cost||0));
+  const max=Math.max(...data,0.0001);
+
+  // grid
+  ctx.strokeStyle='rgba(255,255,255,.08)';
+  ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t + (h-pad.t-pad.b)*(i/4);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();
+    const val=(max*(1-i/4)).toFixed(2);
+    ctx.fillStyle='rgba(200,215,255,.7)';ctx.font='11px sans-serif';ctx.fillText(`$${val}`,6,y+4);
+  }
+
+  // line
+  const step=(w-pad.l-pad.r)/Math.max(data.length-1,1);
+  const points=data.map((v,i)=>({
+    x:pad.l + i*step,
+    y:pad.t + (1-v/max)*(h-pad.t-pad.b)
+  }));
+
+  // area
+  const grad=ctx.createLinearGradient(0,pad.t,0,h-pad.b);
+  grad.addColorStop(0,'rgba(110,168,255,.38)');
+  grad.addColorStop(1,'rgba(110,168,255,.02)');
+  ctx.beginPath();
+  points.forEach((p,i)=> i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+  ctx.lineTo(points.at(-1)?.x||pad.l,h-pad.b);
+  ctx.lineTo(points[0]?.x||pad.l,h-pad.b);
+  ctx.closePath();
+  ctx.fillStyle=grad;ctx.fill();
+
+  ctx.beginPath();
+  points.forEach((p,i)=> i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+  ctx.strokeStyle='#86b6ff';ctx.lineWidth=2.2;ctx.stroke();
+
+  // points
+  ctx.fillStyle='#cfe0ff';
+  points.forEach((p,i)=>{ if(i%6===0 || i===points.length-1){ ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fill(); }});
+}
+
+async function load(){
+  const r=await fetch('./data/latest.json?_='+Date.now());
+  if(!r.ok) throw new Error('無法讀取資料');
+  const d=await r.json();
+
+  const cost=Number(d.totalCost||0);
+  document.getElementById('cost').textContent=fmtMoney(cost);
+  document.getElementById('msgs').textContent=String(d.messageCount||0);
+  document.getElementById('updated').textContent='更新：'+new Date(d.generatedAt).toLocaleString('zh-TW');
+  document.getElementById('range').textContent=`區間：${new Date(d.range.start).toLocaleString('zh-TW')} → ${new Date(d.range.end).toLocaleString('zh-TW')}`;
+
+  if(cost>50){
+    document.getElementById('status').textContent='成本偏高';
+    document.getElementById('status').style.color='var(--danger)';
+    document.getElementById('warn').textContent='建議檢查高成本模型與批次任務';
+  } else if(cost>20){
+    document.getElementById('status').textContent='注意';
+    document.getElementById('status').style.color='var(--warn)';
+    document.getElementById('warn').textContent='成本有上升趨勢';
+  } else {
+    document.getElementById('status').textContent='正常';
+    document.getElementById('status').style.color='var(--good)';
+    document.getElementById('warn').textContent='';
+  }
+
+  renderList('models', d.topModels||[]);
+  if((d.topAgents||[]).length) renderList('agents', d.topAgents||[]);
+  drawTrend(d.hourly||[]);
+}
+
+load().catch(e=>{
+  document.getElementById('updated').textContent='載入失敗：'+e.message;
+});
 setInterval(()=>load().catch(()=>{}), 60000);
 </script>
 </body>
