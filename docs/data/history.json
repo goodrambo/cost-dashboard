@@ -2281,16 +2281,16 @@
   },
   {
     "bucket": "2026-04-07T13:14:00+08:00",
-    "generatedAt": "2026-04-07T13:14:07.723990+08:00",
+    "generatedAt": "2026-04-07T13:14:11.470381+08:00",
     "range": {
-      "start": "2026-04-06T13:14:07.723990+08:00",
-      "end": "2026-04-07T13:14:07.723990+08:00"
+      "start": "2026-04-06T13:14:11.470381+08:00",
+      "end": "2026-04-07T13:14:11.470381+08:00"
     },
     "windowHours": 24,
-    "totalCost24h": 184.991905,
-    "totalCost7d": 192.911557,
-    "totalCostAll": 231.097393,
-    "messageCount": 678,
+    "totalCost24h": 185.007618,
+    "totalCost7d": 192.92727,
+    "totalCostAll": 231.113106,
+    "messageCount": 679,
     "models": [
       {
         "name": "gpt-5.4-pro",
@@ -2308,10 +2308,466 @@
       },
       {
         "name": "gpt-5.3-codex",
-        "cost24h": 7.975548,
-        "cost7d": 7.975548,
-        "costAll": 7.975548,
-        "messages24h": 344
+        "cost24h": 7.991261,
+        "cost7d": 7.991261,
+        "costAll": 7.991261,
+        "messages24h": 345
+      },
+      {
+        "name": "gpt-5-mini",
+        "cost24h": 0.144236,
+        "cost7d": 0.144236,
+        "costAll": 0.144236,
+        "messages24h": 48
+      },
+      {
+        "name": "gpt-4.1-mini",
+        "cost24h": 0.004037,
+        "cost7d": 0.004037,
+        "costAll": 0.004037,
+        "messages24h": 1
+      },
+      {
+        "name": "delivery-mirror",
+        "cost24h": 0.0,
+        "cost7d": 0.0,
+        "costAll": 0.0,
+        "messages24h": 2
+      }
+    ]
+  },
+  {
+    "bucket": "2026-04-07T13:22:00+08:00",
+    "generatedAt": "2026-04-07T13:22:20.987526+08:00",
+    "range": {
+      "start": "2026-04-06T13:22:20.987526+08:00",
+      "end": "2026-04-07T13:22:20.987526+08:00"
+    },
+    "windowHours": 24,
+    "totalCost24h": 185.043568,
+    "totalCost7d": 192.96322,
+    "totalCostAll": 231.149056,
+    "messageCount": 681,
+    "models": [
+      {
+        "name": "gpt-5.4-pro",
+        "cost24h": 161.52927,
+        "cost7d": 161.52927,
+        "costAll": 161.52927,
+        "messages24h": 57
+      },
+      {
+        "name": "gpt-5.4",
+        "cost24h": 15.338815,
+        "cost7d": 23.258466,
+        "costAll": 61.444303,
+        "messages24h": 226
+      },
+      {
+        "name": "gpt-5.3-codex",
+        "cost24h": 8.02721,
+        "cost7d": 8.02721,
+        "costAll": 8.02721,
+        "messages24h": 347
+      },
+      {
+        "name": "gpt-5-mini",
+        "cost24h": 0.144236,
+        "cost7d": 0.144236,
+        "costAll": 0.144236,
+        "messages24h": 48
+      },
+      {
+        "name": "gpt-4.1-mini",
+        "cost24h": 0.004037,
+        "cost7d": 0.004037,
+        "costAll": 0.004037,
+        "messages24h": 1
+      },
+      {
+        "name": "delivery-mirror",
+        "cost24h": 0.0,
+        "cost7d": 0.0,
+        "costAll": 0.0,
+        "messages24h": 2
+      }
+    ]
+  },
+  {
+    "bucket": "2026-04-07T13:32:00+08:00",
+    "generatedAt": "2026-04-07T13:32:22.808202+08:00",
+    "range": {
+      "start": "2026-04-06T13:32:22.808202+08:00",
+      "end": "2026-04-07T13:32:22.808202+08:00"
+    },
+    "windowHours": 24,
+    "totalCost24h": 185.043568,
+    "totalCost7d": 192.96322,
+    "totalCostAll": 231.149056,
+    "messageCount": 681,
+    "models": [
+      {
+        "name": "gpt-5.4-pro",
+        "cost24h": 161.52927,
+        "cost7d": 161.52927,
+        "costAll": 161.52927,
+        "messages24h": 57
+      },
+      {
+        "name": "gpt-5.4",
+        "cost24h": 15.338815,
+        "cost7d": 23.258466,
+        "costAll": 61.444303,
+        "messages24h": 226
+      },
+      {
+        "name": "gpt-5.3-codex",
+        "cost24h": 8.02721,
+        "cost7d": 8.02721,
+        "costAll": 8.02721,
+        "messages24h": 347
+      },
+      {
+        "name": "gpt-5-mini",
+        "cost24h": 0.144236,
+        "cost7d": 0.144236,
+        "costAll": 0.144236,
+        "messages24h": 48
+      },
+      {
+        "name": "gpt-4.1-mini",
+        "cost24h": 0.004037,
+        "cost7d": 0.004037,
+        "costAll": 0.004037,
+        "messages24h": 1
+      },
+      {
+        "name": "delivery-mirror",
+        "cost24h": 0.0,
+        "cost7d": 0.0,
+        "costAll": 0.0,
+        "messages24h": 2
+      }
+    ]
+  },
+  {
+    "bucket": "2026-04-07T13:42:00+08:00",
+    "generatedAt": "2026-04-07T13:42:24.920860+08:00",
+    "range": {
+      "start": "2026-04-06T13:42:24.920860+08:00",
+      "end": "2026-04-07T13:42:24.920860+08:00"
+    },
+    "windowHours": 24,
+    "totalCost24h": 184.910288,
+    "totalCost7d": 192.96322,
+    "totalCostAll": 231.149056,
+    "messageCount": 680,
+    "models": [
+      {
+        "name": "gpt-5.4-pro",
+        "cost24h": 161.52927,
+        "cost7d": 161.52927,
+        "costAll": 161.52927,
+        "messages24h": 57
+      },
+      {
+        "name": "gpt-5.4",
+        "cost24h": 15.205535,
+        "cost7d": 23.258466,
+        "costAll": 61.444303,
+        "messages24h": 225
+      },
+      {
+        "name": "gpt-5.3-codex",
+        "cost24h": 8.02721,
+        "cost7d": 8.02721,
+        "costAll": 8.02721,
+        "messages24h": 347
+      },
+      {
+        "name": "gpt-5-mini",
+        "cost24h": 0.144236,
+        "cost7d": 0.144236,
+        "costAll": 0.144236,
+        "messages24h": 48
+      },
+      {
+        "name": "gpt-4.1-mini",
+        "cost24h": 0.004037,
+        "cost7d": 0.004037,
+        "costAll": 0.004037,
+        "messages24h": 1
+      },
+      {
+        "name": "delivery-mirror",
+        "cost24h": 0.0,
+        "cost7d": 0.0,
+        "costAll": 0.0,
+        "messages24h": 2
+      }
+    ]
+  },
+  {
+    "bucket": "2026-04-07T13:52:00+08:00",
+    "generatedAt": "2026-04-07T13:52:26.831780+08:00",
+    "range": {
+      "start": "2026-04-06T13:52:26.831780+08:00",
+      "end": "2026-04-07T13:52:26.831780+08:00"
+    },
+    "windowHours": 24,
+    "totalCost24h": 184.811039,
+    "totalCost7d": 192.96322,
+    "totalCostAll": 231.149056,
+    "messageCount": 675,
+    "models": [
+      {
+        "name": "gpt-5.4-pro",
+        "cost24h": 161.52927,
+        "cost7d": 161.52927,
+        "costAll": 161.52927,
+        "messages24h": 57
+      },
+      {
+        "name": "gpt-5.4",
+        "cost24h": 15.106286,
+        "cost7d": 23.258466,
+        "costAll": 61.444303,
+        "messages24h": 220
+      },
+      {
+        "name": "gpt-5.3-codex",
+        "cost24h": 8.02721,
+        "cost7d": 8.02721,
+        "costAll": 8.02721,
+        "messages24h": 347
+      },
+      {
+        "name": "gpt-5-mini",
+        "cost24h": 0.144236,
+        "cost7d": 0.144236,
+        "costAll": 0.144236,
+        "messages24h": 48
+      },
+      {
+        "name": "gpt-4.1-mini",
+        "cost24h": 0.004037,
+        "cost7d": 0.004037,
+        "costAll": 0.004037,
+        "messages24h": 1
+      },
+      {
+        "name": "delivery-mirror",
+        "cost24h": 0.0,
+        "cost7d": 0.0,
+        "costAll": 0.0,
+        "messages24h": 2
+      }
+    ]
+  },
+  {
+    "bucket": "2026-04-07T14:02:00+08:00",
+    "generatedAt": "2026-04-07T14:02:28.538594+08:00",
+    "range": {
+      "start": "2026-04-06T14:02:28.538594+08:00",
+      "end": "2026-04-07T14:02:28.538594+08:00"
+    },
+    "windowHours": 24,
+    "totalCost24h": 184.811039,
+    "totalCost7d": 192.96322,
+    "totalCostAll": 231.149056,
+    "messageCount": 675,
+    "models": [
+      {
+        "name": "gpt-5.4-pro",
+        "cost24h": 161.52927,
+        "cost7d": 161.52927,
+        "costAll": 161.52927,
+        "messages24h": 57
+      },
+      {
+        "name": "gpt-5.4",
+        "cost24h": 15.106286,
+        "cost7d": 23.258466,
+        "costAll": 61.444303,
+        "messages24h": 220
+      },
+      {
+        "name": "gpt-5.3-codex",
+        "cost24h": 8.02721,
+        "cost7d": 8.02721,
+        "costAll": 8.02721,
+        "messages24h": 347
+      },
+      {
+        "name": "gpt-5-mini",
+        "cost24h": 0.144236,
+        "cost7d": 0.144236,
+        "costAll": 0.144236,
+        "messages24h": 48
+      },
+      {
+        "name": "gpt-4.1-mini",
+        "cost24h": 0.004037,
+        "cost7d": 0.004037,
+        "costAll": 0.004037,
+        "messages24h": 1
+      },
+      {
+        "name": "delivery-mirror",
+        "cost24h": 0.0,
+        "cost7d": 0.0,
+        "costAll": 0.0,
+        "messages24h": 2
+      }
+    ]
+  },
+  {
+    "bucket": "2026-04-07T14:12:00+08:00",
+    "generatedAt": "2026-04-07T14:12:30.152306+08:00",
+    "range": {
+      "start": "2026-04-06T14:12:30.152306+08:00",
+      "end": "2026-04-07T14:12:30.152306+08:00"
+    },
+    "windowHours": 24,
+    "totalCost24h": 184.811039,
+    "totalCost7d": 192.96322,
+    "totalCostAll": 231.149056,
+    "messageCount": 675,
+    "models": [
+      {
+        "name": "gpt-5.4-pro",
+        "cost24h": 161.52927,
+        "cost7d": 161.52927,
+        "costAll": 161.52927,
+        "messages24h": 57
+      },
+      {
+        "name": "gpt-5.4",
+        "cost24h": 15.106286,
+        "cost7d": 23.258466,
+        "costAll": 61.444303,
+        "messages24h": 220
+      },
+      {
+        "name": "gpt-5.3-codex",
+        "cost24h": 8.02721,
+        "cost7d": 8.02721,
+        "costAll": 8.02721,
+        "messages24h": 347
+      },
+      {
+        "name": "gpt-5-mini",
+        "cost24h": 0.144236,
+        "cost7d": 0.144236,
+        "costAll": 0.144236,
+        "messages24h": 48
+      },
+      {
+        "name": "gpt-4.1-mini",
+        "cost24h": 0.004037,
+        "cost7d": 0.004037,
+        "costAll": 0.004037,
+        "messages24h": 1
+      },
+      {
+        "name": "delivery-mirror",
+        "cost24h": 0.0,
+        "cost7d": 0.0,
+        "costAll": 0.0,
+        "messages24h": 2
+      }
+    ]
+  },
+  {
+    "bucket": "2026-04-07T14:22:00+08:00",
+    "generatedAt": "2026-04-07T14:22:32.159937+08:00",
+    "range": {
+      "start": "2026-04-06T14:22:32.159937+08:00",
+      "end": "2026-04-07T14:22:32.159937+08:00"
+    },
+    "windowHours": 24,
+    "totalCost24h": 184.811039,
+    "totalCost7d": 192.96322,
+    "totalCostAll": 231.149056,
+    "messageCount": 675,
+    "models": [
+      {
+        "name": "gpt-5.4-pro",
+        "cost24h": 161.52927,
+        "cost7d": 161.52927,
+        "costAll": 161.52927,
+        "messages24h": 57
+      },
+      {
+        "name": "gpt-5.4",
+        "cost24h": 15.106286,
+        "cost7d": 23.258466,
+        "costAll": 61.444303,
+        "messages24h": 220
+      },
+      {
+        "name": "gpt-5.3-codex",
+        "cost24h": 8.02721,
+        "cost7d": 8.02721,
+        "costAll": 8.02721,
+        "messages24h": 347
+      },
+      {
+        "name": "gpt-5-mini",
+        "cost24h": 0.144236,
+        "cost7d": 0.144236,
+        "costAll": 0.144236,
+        "messages24h": 48
+      },
+      {
+        "name": "gpt-4.1-mini",
+        "cost24h": 0.004037,
+        "cost7d": 0.004037,
+        "costAll": 0.004037,
+        "messages24h": 1
+      },
+      {
+        "name": "delivery-mirror",
+        "cost24h": 0.0,
+        "cost7d": 0.0,
+        "costAll": 0.0,
+        "messages24h": 2
+      }
+    ]
+  },
+  {
+    "bucket": "2026-04-07T14:27:00+08:00",
+    "generatedAt": "2026-04-07T14:27:35.166858+08:00",
+    "range": {
+      "start": "2026-04-06T14:27:35.166858+08:00",
+      "end": "2026-04-07T14:27:35.166858+08:00"
+    },
+    "windowHours": 24,
+    "totalCost24h": 185.038931,
+    "totalCost7d": 193.191112,
+    "totalCostAll": 231.376948,
+    "messageCount": 677,
+    "models": [
+      {
+        "name": "gpt-5.4-pro",
+        "cost24h": 161.52927,
+        "cost7d": 161.52927,
+        "costAll": 161.52927,
+        "messages24h": 57
+      },
+      {
+        "name": "gpt-5.4",
+        "cost24h": 15.106286,
+        "cost7d": 23.258466,
+        "costAll": 61.444303,
+        "messages24h": 220
+      },
+      {
+        "name": "gpt-5.3-codex",
+        "cost24h": 8.255103,
+        "cost7d": 8.255103,
+        "costAll": 8.255103,
+        "messages24h": 349
       },
       {
         "name": "gpt-5-mini",
