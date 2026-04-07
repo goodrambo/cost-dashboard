@@ -100,6 +100,7 @@
 
 <script>
 let dataCache=null;
+let currentModel='ALL';
 let chartState={points:[],datasets:[],rows:[],geom:null};
 const fmtMoney=v=>`$${Number(v||0).toFixed(4)}`;
 const fmtTime=s=>new Date(s).toLocaleString('en-US',{hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
@@ -116,22 +117,21 @@ function fillFilter(models){
 function buildDatasets(model){
   const rows=(dataCache.hourly||[]).slice(-24);
   const allSeries=rows.map(x=>Number(x.cost||0));
-  const datasets=[{name:'ALL',color:COLORS[0],values:allSeries}];
+  const datasets=[];
 
   const models=(dataCache.models||[]);
   if(model==='ALL'){
+    datasets.push({name:'ALL',color:COLORS[0],values:allSeries});
     models.forEach((m,idx)=>{
       datasets.push({name:m,color:COLORS[(idx+1)%COLORS.length],values:rows.map(r=>Number((r.byModel||{})[m]||0))});
     });
-  }else{
-    if(models.includes(model)){
-      datasets.push({name:model,color:COLORS[1],values:rows.map(r=>Number((r.byModel||{})[model]||0))});
-    }
+  }else if(models.includes(model)){
+    datasets.push({name:model,color:COLORS[1],values:rows.map(r=>Number((r.byModel||{})[model]||0))});
   }
   return {rows,datasets};
 }
 
-function drawTrend(model){
+function drawTrend(model, hoverIdx=null){
   const {rows,datasets}=buildDatasets(model);
   const c=document.getElementById('trend');
   const dpr=Math.max(window.devicePixelRatio||1,1);
@@ -186,6 +186,18 @@ function drawTrend(model){
   ctx.fillStyle='rgba(225,236,255,.9)';ctx.font='12px Inter, sans-serif';
   marks.forEach(m=>{ if(m.i<0) return; const x=p.l+m.i*step; ctx.fillText(m.t,x-22,h-16); });
 
+  if(hoverIdx!==null && hoverIdx>=0 && hoverIdx<rows.length){
+    const x=p.l+hoverIdx*step;
+    ctx.save();
+    ctx.strokeStyle='rgba(255,255,255,.55)';
+    ctx.setLineDash([4,4]);
+    ctx.beginPath();
+    ctx.moveTo(x,p.t);
+    ctx.lineTo(x,h-p.b);
+    ctx.stroke();
+    ctx.restore();
+  }
+
   chartState={points:allPoints,datasets,rows,geom:{p,w,h,step}};
 }
 
@@ -205,9 +217,10 @@ function updateKPIs(model){
 
   document.getElementById('chartTitle').textContent = model==='ALL'
     ? '24h Trend (ALL + each model)'
-    : `24h Trend (ALL + ${model})`;
+    : `24h Trend (${model})`;
 
-  drawTrend(model);
+  currentModel=model;
+  drawTrend(model, null);
 }
 
 function renderTable(){
@@ -250,13 +263,15 @@ function initHover(){
     tip.innerHTML=`<div class='t'>${row.hour}:00</div>${lines}`;
     tip.style.display='block';
 
+    drawTrend(currentModel, idx);
+
     const tx=Math.min(rect.width-220, Math.max(8, x+12));
     const ty=Math.max(8, (e.clientY-rect.top)-12);
     tip.style.left=`${tx}px`;
     tip.style.top=`${ty}px`;
   });
 
-  c.addEventListener('mouseleave',()=>{ tip.style.display='none'; });
+  c.addEventListener('mouseleave',()=>{ tip.style.display='none'; drawTrend(currentModel, null); });
 }
 
 document.getElementById('modelFilter').addEventListener('change',e=>updateKPIs(e.target.value));
