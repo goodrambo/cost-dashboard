@@ -1,50 +1,59 @@
 {
-  "generatedAt": "2026-04-07T04:40:17.066587+08:00",
+  "generatedAt": "2026-04-07T12:49:10.320491+08:00",
   "windowHours": 24,
   "range": {
-    "start": "2026-04-06T04:40:17.066587+08:00",
-    "end": "2026-04-07T04:40:17.066587+08:00"
+    "start": "2026-04-06T12:49:10.320491+08:00",
+    "end": "2026-04-07T12:49:10.320491+08:00"
   },
-  "totalCost": 90.847576,
-  "totalCost24h": 90.847576,
-  "totalCost7d": 90.847576,
-  "totalCostAll": 90.847576,
-  "messageCount": 463,
+  "totalCost": 17.565397,
+  "totalCost24h": 17.565397,
+  "totalCost7d": 18.326201,
+  "totalCostAll": 18.326201,
+  "messageCount": 353,
   "messageCountByModel24h": {
-    "gpt-5.4-pro": 38,
-    "gpt-5.4": 171,
-    "gpt-5.3-codex": 252,
+    "gpt-5.4": 226,
+    "gpt-5.3-codex": 74,
+    "gpt-5.4-pro": 2,
+    "gpt-5-mini": 48,
     "gpt-4.1-mini": 1,
-    "gpt-5-mini": 1
+    "delivery-mirror": 2
   },
   "models": [
-    "gpt-5.4-pro",
     "gpt-5.4",
     "gpt-5.3-codex",
+    "gpt-5.4-pro",
+    "gpt-5-mini",
     "gpt-4.1-mini",
-    "gpt-5-mini"
+    "delivery-mirror"
   ],
   "modelStats": [
     {
-      "name": "gpt-5.4-pro",
-      "cost24h": 74.22669,
-      "cost7d": 74.22669,
-      "costAll": 74.22669,
-      "messages24h": 38
-    },
-    {
       "name": "gpt-5.4",
-      "cost24h": 10.924982,
-      "cost7d": 10.924982,
-      "costAll": 10.924982,
-      "messages24h": 171
+      "cost24h": 15.338815,
+      "cost7d": 16.099619,
+      "costAll": 16.099619,
+      "messages24h": 226
     },
     {
       "name": "gpt-5.3-codex",
-      "cost24h": 5.689154,
-      "cost7d": 5.689154,
-      "costAll": 5.689154,
-      "messages24h": 252
+      "cost24h": 1.17093,
+      "cost7d": 1.17093,
+      "costAll": 1.17093,
+      "messages24h": 74
+    },
+    {
+      "name": "gpt-5.4-pro",
+      "cost24h": 0.90738,
+      "cost7d": 0.90738,
+      "costAll": 0.90738,
+      "messages24h": 2
+    },
+    {
+      "name": "gpt-5-mini",
+      "cost24h": 0.144236,
+      "cost7d": 0.144236,
+      "costAll": 0.144236,
+      "messages24h": 48
     },
     {
       "name": "gpt-4.1-mini",
@@ -54,35 +63,42 @@
       "messages24h": 1
     },
     {
-      "name": "gpt-5-mini",
-      "cost24h": 0.002713,
-      "cost7d": 0.002713,
-      "costAll": 0.002713,
-      "messages24h": 1
+      "name": "delivery-mirror",
+      "cost24h": 0.0,
+      "cost7d": 0.0,
+      "costAll": 0.0,
+      "messages24h": 2
     }
   ],
   "topAgents": [],
   "topModels": [
     {
-      "name": "gpt-5.4-pro",
-      "cost24h": 74.22669,
-      "cost7d": 74.22669,
-      "costAll": 74.22669,
-      "messages24h": 38
-    },
-    {
       "name": "gpt-5.4",
-      "cost24h": 10.924982,
-      "cost7d": 10.924982,
-      "costAll": 10.924982,
-      "messages24h": 171
+      "cost24h": 15.338815,
+      "cost7d": 16.099619,
+      "costAll": 16.099619,
+      "messages24h": 226
     },
     {
       "name": "gpt-5.3-codex",
-      "cost24h": 5.689154,
-      "cost7d": 5.689154,
-      "costAll": 5.689154,
-      "messages24h": 252
+      "cost24h": 1.17093,
+      "cost7d": 1.17093,
+      "costAll": 1.17093,
+      "messages24h": 74
+    },
+    {
+      "name": "gpt-5.4-pro",
+      "cost24h": 0.90738,
+      "cost7d": 0.90738,
+      "costAll": 0.90738,
+      "messages24h": 2
+    },
+    {
+      "name": "gpt-5-mini",
+      "cost24h": 0.144236,
+      "cost7d": 0.144236,
+      "costAll": 0.144236,
+      "messages24h": 48
     },
     {
       "name": "gpt-4.1-mini",
@@ -92,288 +108,318 @@
       "messages24h": 1
     },
     {
-      "name": "gpt-5-mini",
-      "cost24h": 0.002713,
-      "cost7d": 0.002713,
-      "costAll": 0.002713,
-      "messages24h": 1
+      "name": "delivery-mirror",
+      "cost24h": 0.0,
+      "cost7d": 0.0,
+      "costAll": 0.0,
+      "messages24h": 2
     }
   ],
   "hourly": [
     {
-      "hour": "2026-04-06 04:00",
-      "cost": 0.0,
-      "byModel": {
-        "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.0,
-        "gpt-5.3-codex": 0.0,
-        "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
-      }
-    },
-    {
-      "hour": "2026-04-06 05:00",
-      "cost": 0.0,
-      "byModel": {
-        "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.0,
-        "gpt-5.3-codex": 0.0,
-        "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
-      }
-    },
-    {
-      "hour": "2026-04-06 06:00",
-      "cost": 0.0,
-      "byModel": {
-        "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.0,
-        "gpt-5.3-codex": 0.0,
-        "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
-      }
-    },
-    {
-      "hour": "2026-04-06 07:00",
-      "cost": 0.0,
-      "byModel": {
-        "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.0,
-        "gpt-5.3-codex": 0.0,
-        "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
-      }
-    },
-    {
-      "hour": "2026-04-06 08:00",
-      "cost": 0.387855,
-      "byModel": {
-        "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.387855,
-        "gpt-5.3-codex": 0.0,
-        "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
-      }
-    },
-    {
-      "hour": "2026-04-06 09:00",
-      "cost": 0.0,
-      "byModel": {
-        "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.0,
-        "gpt-5.3-codex": 0.0,
-        "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
-      }
-    },
-    {
-      "hour": "2026-04-06 10:00",
-      "cost": 0.093288,
-      "byModel": {
-        "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.093288,
-        "gpt-5.3-codex": 0.0,
-        "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
-      }
-    },
-    {
-      "hour": "2026-04-06 11:00",
-      "cost": 0.151099,
-      "byModel": {
-        "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.151099,
-        "gpt-5.3-codex": 0.0,
-        "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
-      }
-    },
-    {
       "hour": "2026-04-06 12:00",
-      "cost": 0.128563,
+      "cost": 0.0,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.128563,
+        "gpt-5.4": 0.0,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 13:00",
       "cost": 0.232529,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.232529,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 14:00",
       "cost": 0.166295,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.166295,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 15:00",
       "cost": 0.0,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.0,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 16:00",
       "cost": 0.17427,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.17427,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 17:00",
       "cost": 0.0,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.0,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 18:00",
       "cost": 0.184666,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.184666,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 19:00",
       "cost": 0.304597,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.304597,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 20:00",
       "cost": 0.506949,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.506949,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 21:00",
       "cost": 0.901185,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.901185,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 22:00",
       "cost": 0.799875,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.799875,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-06 23:00",
       "cost": 0.509711,
       "byModel": {
-        "gpt-5.4-pro": 0.0,
         "gpt-5.4": 0.509711,
         "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-07 00:00",
-      "cost": 2.825201,
+      "cost": 0.736187,
       "byModel": {
-        "gpt-5.4-pro": 1.95066,
         "gpt-5.4": 0.729437,
-        "gpt-5.3-codex": 0.138354,
+        "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.002713,
         "gpt-4.1-mini": 0.004037,
-        "gpt-5-mini": 0.002713
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-07 01:00",
-      "cost": 29.21122,
+      "cost": 1.560628,
       "byModel": {
-        "gpt-5.4-pro": 27.30705,
         "gpt-5.4": 1.560628,
-        "gpt-5.3-codex": 0.343541,
+        "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-07 02:00",
-      "cost": 28.701347,
+      "cost": 3.876634,
       "byModel": {
-        "gpt-5.4-pro": 22.3935,
         "gpt-5.4": 3.718363,
-        "gpt-5.3-codex": 2.589483,
+        "gpt-5.3-codex": 0.15827,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-07 03:00",
-      "cost": 24.441306,
+      "cost": 0.416907,
       "byModel": {
-        "gpt-5.4-pro": 22.57548,
         "gpt-5.4": 0.375673,
-        "gpt-5.3-codex": 1.490153,
+        "gpt-5.3-codex": 0.041234,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
       }
     },
     {
       "hour": "2026-04-07 04:00",
-      "cost": 1.127623,
+      "cost": 1.02052,
       "byModel": {
+        "gpt-5.4": 0.979216,
+        "gpt-5.3-codex": 0.041304,
         "gpt-5.4-pro": 0.0,
-        "gpt-5.4": 0.0,
-        "gpt-5.3-codex": 1.127623,
+        "gpt-5-mini": 0.0,
         "gpt-4.1-mini": 0.0,
-        "gpt-5-mini": 0.0
+        "delivery-mirror": 0.0
+      }
+    },
+    {
+      "hour": "2026-04-07 05:00",
+      "cost": 4.552599,
+      "byModel": {
+        "gpt-5.4": 3.51283,
+        "gpt-5.3-codex": 0.032948,
+        "gpt-5.4-pro": 0.90738,
+        "gpt-5-mini": 0.09944,
+        "gpt-4.1-mini": 0.0,
+        "delivery-mirror": 0.0
+      }
+    },
+    {
+      "hour": "2026-04-07 06:00",
+      "cost": 1.270732,
+      "byModel": {
+        "gpt-5.4": 0.68259,
+        "gpt-5.3-codex": 0.588142,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
+        "gpt-4.1-mini": 0.0,
+        "delivery-mirror": 0.0
+      }
+    },
+    {
+      "hour": "2026-04-07 07:00",
+      "cost": 0.0,
+      "byModel": {
+        "gpt-5.4": 0.0,
+        "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
+        "gpt-4.1-mini": 0.0,
+        "delivery-mirror": 0.0
+      }
+    },
+    {
+      "hour": "2026-04-07 08:00",
+      "cost": 0.042083,
+      "byModel": {
+        "gpt-5.4": 0.0,
+        "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.042083,
+        "gpt-4.1-mini": 0.0,
+        "delivery-mirror": 0.0
+      }
+    },
+    {
+      "hour": "2026-04-07 09:00",
+      "cost": 0.0,
+      "byModel": {
+        "gpt-5.4": 0.0,
+        "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
+        "gpt-4.1-mini": 0.0,
+        "delivery-mirror": 0.0
+      }
+    },
+    {
+      "hour": "2026-04-07 10:00",
+      "cost": 0.0,
+      "byModel": {
+        "gpt-5.4": 0.0,
+        "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
+        "gpt-4.1-mini": 0.0,
+        "delivery-mirror": 0.0
+      }
+    },
+    {
+      "hour": "2026-04-07 11:00",
+      "cost": 0.0,
+      "byModel": {
+        "gpt-5.4": 0.0,
+        "gpt-5.3-codex": 0.0,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
+        "gpt-4.1-mini": 0.0,
+        "delivery-mirror": 0.0
+      }
+    },
+    {
+      "hour": "2026-04-07 12:00",
+      "cost": 0.309031,
+      "byModel": {
+        "gpt-5.4": 0.0,
+        "gpt-5.3-codex": 0.309031,
+        "gpt-5.4-pro": 0.0,
+        "gpt-5-mini": 0.0,
+        "gpt-4.1-mini": 0.0,
+        "delivery-mirror": 0.0
       }
     }
-  ]
+  ],
+  "meta": {
+    "dedupeByEventId": true,
+    "dedupeSkipped": 0,
+    "filesScanned": 22
+  }
 }

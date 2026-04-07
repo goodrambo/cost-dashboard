@@ -78,6 +78,11 @@
         <canvas id="trend" width="1000" height="260"></canvas>
       </div>
 
+      <div class="card chart">
+        <div class="label" id="historyTitle" style="margin-bottom:8px">History Snapshots (24h Cost)</div>
+        <canvas id="historyTrend" width="1000" height="260"></canvas>
+      </div>
+
       <div class="card table">
         <div class="label" style="margin-bottom:8px">Models (sorted by All-Time, 7D, 24H)</div>
         <div style="overflow:auto">
@@ -94,6 +99,7 @@
 
 <script>
 let dataCache=null;
+let historyCache=[];
 const fmtMoney=v=>`$${Number(v||0).toFixed(4)}`;
 const fmtTime=s=>new Date(s).toLocaleString('en-US',{hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
 
@@ -159,6 +165,70 @@ function drawTrend(d,model){
   });
 }
 
+function getHistorySeries(model){
+  const rows=historyCache||[];
+  if(model==='ALL') return rows.map(x=>Number(x.totalCost24h||0));
+  return rows.map(x=>{
+    const ms=Array.isArray(x.models)?x.models:[];
+    const m=ms.find(v=>v.name===model);
+    return Number((m&&m.cost24h)||0);
+  });
+}
+
+function drawHistoryTrend(model){
+  const rows=historyCache||[];
+  const pointsData=getHistorySeries(model);
+  const c=document.getElementById('historyTrend');
+  if(!c) return;
+  const dpr=Math.max(window.devicePixelRatio||1,1);
+  const cssW=c.clientWidth || 1000;
+  const cssH=260;
+  c.width=Math.floor(cssW*dpr);
+  c.height=Math.floor(cssH*dpr);
+  const ctx=c.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+
+  const w=cssW,h=cssH,p={l:78,r:20,t:18,b:46};
+  ctx.clearRect(0,0,w,h);
+  const max=Math.max(...pointsData,0.0001);
+
+  ctx.strokeStyle='rgba(255,255,255,.10)';ctx.lineWidth=1;
+  ctx.fillStyle='rgba(225,236,255,.88)';ctx.font='13px Inter, sans-serif';
+  for(let i=0;i<=4;i++){
+    const y=p.t+(h-p.t-p.b)*(i/4);
+    ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();
+    ctx.fillText(`$${(max*(1-i/4)).toFixed(2)}`,10,y+4);
+  }
+
+  ctx.beginPath();ctx.moveTo(p.l,h-p.b);ctx.lineTo(w-p.r,h-p.b);ctx.strokeStyle='rgba(255,255,255,.2)';ctx.stroke();
+
+  if(pointsData.length===0){
+    ctx.fillStyle='rgba(225,236,255,.7)';
+    ctx.fillText('No history yet', p.l+10, h/2);
+    return;
+  }
+
+  const step=(w-p.l-p.r)/Math.max(pointsData.length-1,1);
+  const pts=pointsData.map((v,i)=>({x:p.l+i*step,y:p.t+(1-v/max)*(h-p.t-p.b)}));
+
+  const grad=ctx.createLinearGradient(0,p.t,0,h-p.b);
+  grad.addColorStop(0,'rgba(149,133,255,.35)');grad.addColorStop(1,'rgba(149,133,255,.03)');
+  ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+  ctx.lineTo(pts.at(-1)?.x||p.l,h-p.b);ctx.lineTo(pts[0]?.x||p.l,h-p.b);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+
+  ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+  ctx.strokeStyle='#b19dff';ctx.lineWidth=2.2;ctx.stroke();
+
+  const first=rows[0]?.generatedAt;
+  const last=rows[rows.length-1]?.generatedAt;
+  ctx.fillStyle='rgba(225,236,255,.9)';ctx.font='12px Inter, sans-serif';
+  if(first) ctx.fillText(fmtTime(first).slice(0,16), p.l, h-14);
+  if(last) ctx.fillText(fmtTime(last).slice(0,16), w-p.r-140, h-14);
+
+  const title=document.getElementById('historyTitle');
+  if(title) title.textContent = `History Snapshots (24h Cost) · ${rows.length} points`;
+}
+
 function updateKPIs(model){
   const stats=(dataCache.modelStats||[]);
   const all={cost24h:dataCache.totalCost24h||0,cost7d:dataCache.totalCost7d||0,costAll:dataCache.totalCostAll||0,messages24h:dataCache.messageCount||0};
@@ -175,6 +245,7 @@ function updateKPIs(model){
 
   document.getElementById('chartTitle').textContent = model==='ALL' ? '24h Trend (All Models)' : `24h Trend (${model})`;
   drawTrend(dataCache,model);
+  drawHistoryTrend(model);
 }
 
 function renderTable(){
@@ -184,11 +255,28 @@ function renderTable(){
 }
 
 const DATA_URL='https://gist.githubusercontent.com/goodrambo/a2453d85d2aabc179aa2241997db52b0/raw/latest.json';
+const HISTORY_URL='https://gist.githubusercontent.com/goodrambo/a2453d85d2aabc179aa2241997db52b0/raw/history.json';
 
 async function load(){
-  const r=await fetch(DATA_URL+'?_='+Date.now(), {cache:'no-store'});
-  if(!r.ok) throw new Error('Cannot load data source');
-  dataCache=await r.json();
+  const ts=Date.now();
+  const [latestRes, historyRes] = await Promise.all([
+    fetch(DATA_URL+'?_='+ts, {cache:'no-store'}),
+    fetch(HISTORY_URL+'?_='+ts, {cache:'no-store'})
+  ]);
+
+  if(!latestRes.ok) throw new Error('Cannot load latest data source');
+  dataCache=await latestRes.json();
+
+  if(historyRes.ok){
+    try{
+      const h = await historyRes.json();
+      historyCache = Array.isArray(h) ? h : [];
+    }catch(_){
+      historyCache = [];
+    }
+  } else {
+    historyCache = [];
+  }
 
   document.getElementById('updated').textContent='Updated: '+fmtTime(dataCache.generatedAt);
   document.getElementById('range').textContent=`Range: ${fmtTime(dataCache.range.start)} → ${fmtTime(dataCache.range.end)}`;
